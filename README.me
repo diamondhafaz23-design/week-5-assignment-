@@ -1,0 +1,41 @@
+# SpendWise - Personal Budget & Expense Tracker
+
+## 📌 Project Description
+**SpendWise** is an interactive, digital-first fintech dashboard web application designed to help households track daily personal expenditures. Tailored specifically for localized financial use, the platform features a two-column responsive workspace built with an input expense form and an automated ledger history. Users can define custom monthly budget constraints in Kenyan Shillings (KSh), log categorical transactions dynamically, and monitor financial statistics live as additions or adjustments occur.
+
+---
+
+## 🛠️ Key Core Frontend Modules Deployed
+This software application builds a complete technical foundation in vanilla web development by integrating three core pillars:
+*   **Semantic Markup Structure (`index.html`):** Establishes an accessible blueprint layout grid featuring semantic sections (`<aside>`, `<main>`), forms, user inputs, data tables, and embedded instructional video frames.
+*   **Encapsulated Component Styling (`style.css`):** Employs CSS Grid and Flexbox for proportional multi-column space management, explicit responsive breakpoints (`@media`), root theme variables (`:root`), and precise structural positioning (`position: sticky`, `absolute`, `fixed`).
+*   **Interactive Computational Engine (`script.js`):** Operates client-side logic handling dynamic state management, automated data type conversions, programmatic DOM manipulation, and responsive window alerts.
+
+---
+
+## 🚀 JavaScript Concepts Implemented
+
+### 1. Variables and Core Data Types
+System variables maintain an accurate operational memory of the financial metrics directly within the application pipeline:
+*   **`let` vs `const`:** Block-scoped bindings that undergo programmatic adjustments (such as `currentTotalSpent` or `totalTransactionsCount`) declare via the mutable `let` keyword. System nodes or configuration flags (like `primaryCurrencySymbol` or `submitButton`) specify safely via the read-only `const` keyword.
+*   **Data Types Utilized:**
+    *   **Numbers:** Floating-point and integer primitives managing transactional currency data.
+    *   **Strings:** Sequential character templates handling alphanumeric values and labeling identifiers.
+    *   **Booleans:** Binary flag components evaluating condition checks (`isBudgetExceeded`).
+
+### 2. User Input Extraction & Type Mutability
+Human user input triggers data ingestion pathways via dual mechanics:
+*   **Window Prompt Interception:** On initialization, an automated browser `prompt()` captures the user's intended monthly cap limit. This incoming string is converted into a calculation-ready number through `parseFloat()`.
+*   **Form Control Parsing:** Action buttons capture field entries dynamically. String fields employ text sanitization methods (`.trim()`) to prevent whitespace errors from corrupting calculations.
+
+### 3. Execution of Arithmetic Operations
+Mathematical calculations run inside the application tracking engine automatically on state updates:
+*   **Addition (`+=`):** Sums incoming entry values onto the cumulative running total spent.
+*   **Subtraction (`-`):** Calculates differences to discover exact net remainders, or subtracts values when a deletion routine drops a table ledger item.
+*   **Unit Increments (`+= 1`):** Monitors transaction data volume metrics.
+*   **Relational Logic Comparisons (`>`):** Compares expenditure thresholds against budget parameters to flag system threshold breaks.
+
+### 4. Code Organization via Functions
+Functions group execution commands into structured, reusable code paths:
+*   **Separation of Concerns:** Separate routines handle raw mathematical logic (e.g., `calculateRemainingBalance()`) versus presentation element styling updates (e.g., `updateMetricsDisplay()`).
+*   **Automated Diagnostics:** Dedicated tracking routines pipeline structural data logs (`logDashboardMetrics()`) straight to the browser console tab automatically, printing real-time analytical reports for debugging.

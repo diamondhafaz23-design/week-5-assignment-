@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpendWise Expense Tracker</title>
+  <!-- Direct link to our fresh stylesheet -->
+  <style>
+    :root {
+      --bg-main: #f4f7f6;
+      --bg-white: #ffffff;
+      --text-dark: #333333;
+      --text-muted: #666666;
+      --brand-green: #2e7d32;
+      --brand-dark-green: #1b5e20;
+      --border-light: #e0e0e0;
+      --tag-food: #d1e7dd;
+      --tag-transport: #e2e3e5;
+      --tag-rent: #f8d7da;
+      --tag-entertainment: #cff4fc;
+      --tag-other: #f8f9fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      padding-bottom: 40px;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background-color: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-notifications {
+      position: relative;
+    }
+
+    .icon-btn {
+      background: #f0f0f0;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background-color: #e53935;
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 50%;
+      font-weight: bold;
+    }
+
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sidebar, .instructions-card, .table-card, .media-card, .card {
+      background: var(--bg-white);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+
+    .sidebar h2 {
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .sidebar form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    input:not([type="submit"]), select {
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      background: var(--bg-white);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--brand-green);
+      box-shadow: 0 0 4px rgba(46,125,50,0.25);
+    }
+
+    .btn-primary {
+      padding: 12px;
+      background-color: var(--brand-green);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+      margin-top: 5px;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--brand-dark-green);
+    }
+
+    .summary-grid {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      flex: 1;
+      border-left: 4px solid var(--brand-green);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 15px;
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .card-value {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: var(--brand-dark-green);
+    }
+
+    .table-card h2 {
+      margin-bottom: 15px;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .transaction-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+
+    .transaction-table th {
+      background-color: var(--brand-green);
+      color: white;
+      text-align: left;
+      padding: 12px;
+      font-weight: 500;
+    }
+
+    .transaction-table td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95rem;
+    }
+
+    .transaction-table tr:hover {
+      background-color: #f9fbf9;
+    }
+
+    .tag {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .tag-food { background-color: var(--tag-food); color: #0f5132; }
+    .tag-transport { background-color: var(--tag-transport); color: #41464b; }
+    .tag-rent { background-color: var(--tag-rent); color: #842029; }
+    .tag-entertainment { background-color: var(--tag-entertainment); color: #055160; }
+    .tag-other { background-color: var(--tag-other); color: #41464b; }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-delete:hover {
+      background-color: #bd2130;
+    }
+
+    .media-card h2 {
+      margin-bottom: 15px;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .fixed-help-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--brand-dark-green);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      cursor: pointer;
+      z-index: 999;
+      font-weight: bold;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- Sticky Navigation Header -->
+  <header class="navbar">
+    <div class="logo-container">
+      <span class="logo-img">📊</span>
+      <h1>SpendWise</h1>
+    </div>
+    <div class="nav-notifications">
+      <button class="icon-btn">
+        🔔 Alerts
+        <span class="badge">3</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Two-Column Master Grid Layout -->
+  <div class="dashboard-layout">
+
+    <!-- Left Sidebar: Add Expense Form Component -->
+    <aside class="sidebar">
+      <h2>Add Expense</h2>
+      <form id="expense-form" onsubmit="return false;">
+        <div class="form-group">
+          <label for="expense-name">Name</label>
+          <input type="text" id="expense-name" placeholder="e.g., Groceries" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expense-amount">Amount (KSh)</label>
+          <input type="number" id="expense-amount" placeholder="0.00" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expense-category">Category</label>
+          <select id="expense-category">
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Rent">Rent</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="expense-date">Date</label>
+          <input type="date" id="expense-date" required>
+        </div>
+
+        <button type="button" class="btn-primary">Add Expense</button>
+      </form>
+    </aside>
+
+    <!-- Right Sidebar Panel: Financial Dashboard Insights -->
+    <main class="main-content">
+
+      <!-- Collapsible Guide -->
+      <section class="instructions-card">
+        <div class="instructions-banner">
+          <details open>
+            <summary>▼ How to use this tracker</summary>
+            <p>Set your initialization budget limit, log your day-to-day transactions, and monitor metrics dynamically.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- Flexbox Performance Metric Summary Cards -->
+      <section class="summary-grid">
+        <div class="card">
+          <span class="card-title">Total Spent</span>
+          <span class="card-value value-total">KSh 1,208.70</span>
+        </div>
+        <div class="card">
+          <span class="card-title">Highest Category</span>
+          <span class="card-value value-highest">Rent (KSh 950.00)</span>
+        </div>
+        <div class="card">
+          <span class="card-title">Transactions</span>
+          <span class="card-value value-count">5 Items</span>
+        </div>
+      </section>
+
+      <!-- Data Ledger Responsive Table -->
+      <section class="table-card">
+        <h2>Recent Transactions</h2>
+        <div class="table-responsive">
+          <table class="transaction-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Weekly Groceries</td>
+                <td>KSh 120.50</td>
+                <td><span class="tag tag-food">Food</span></td>
+                <td>2026-03-01</td>
+                <td><button type="button" class="btn-delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td>Monthly Bus Pass</td>
+                <td>KSh 45.00</td>
+                <td><span class="tag tag-transport">Transport</span></td>
+                <td>2026-03-02</td>
+                <td><button type="button" class="btn-delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td>Apartment Rent</td>
+                <td>KSh 950.00</td>
+                <td><span class="tag tag-rent">Rent</span></td>
+                <td>2026-03-03</td>
+                <td><button type="button" class="btn-delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td>Cinema Tickets</td>
+                <td>KSh 28.00</td>
+                <td><span class="tag tag-entertainment">Entertainment</span></td>
+                <td>2026-03-04</td>
+                <td><button type="button" class="btn-delete">Delete</button></td>
+              </tr>
+              <tr>
+                <td>Electricity Bill</td>
+                <td>KSh 65.20</td>
+                <td><span class="tag tag-other">Other</span></td>
+                <td>2026-03-05</td>
+                <td><button type="button" class="btn-delete">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Asset Video Embedding -->
+      <section class="media-card">
+        <h2>Smart Budgeting Tips</h2>
+        <div class="video-container">
+          <iframe 
+            src="https://youtube.com" 
+            title="Budgeting Guide" 
+            frameborder="0" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Fixed Help Anchor Action Item Button -->
+  <button class="fixed-help-btn">💬 Help</button>
+
+  <!-- Import script directly before closing layout container branch tag -->
+  <script src="script.js"></script>
+</body>
+</html>
